@@ -1,72 +1,78 @@
 <!DOCTYPE html>
 <html data-ng-app="todoApp">
 <head lang="en">
-    <meta charset="UTF-8">
-    <title>Pierwszy test</title>
-    <link rel="stylesheet" href="css/bootstrap.css"/>
+  <meta charset="UTF-8">
+  <title>Pierwszy test</title>
+  <link rel="stylesheet" href="css/bootstrap.css"/>
 </head>
 <body ng-controller="ToDoCtrl">
 <h1 class="sr-only">TODO</h1>
 <article class="container">
-    <header class="page-header">
-        <h1>
-            Lista rzeczy do zrobienia użytkownika {{todo.user}}
-            <span class="label label-default" ng-hide="incompleteCount() == 0">
-                {{incompleteCount()}}
-            </span>
-        </h1>
-    </header>
-    <section class="panel panel-default">
-        <h2 class="sr-only">TODOs</h2>
-        <div class="panel-body">
-            <p class="input-group">
-                <input class="form-control" type="text"/>
-                <span class="input-group-btn">
-                    <button class="btn btn-default">Add</button>
-                </span>
-            </p>
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Opis</th>
-                        <th>Zrobione</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="item in todo.items">
-                        <td>{{item.action}}</td>
-                        <td>
-                            <input type="checkbox" ng-model="item.done"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+  <header class="page-header">
+    <h1>
+      Lista rzeczy do zrobienia użytkownika {{todo.user}}
+      <span class="label label-default" ng-class="warningLevel()" ng-hide="incompleteCount() == 0">
+        {{incompleteCount()}}
+      </span>
+    </h1>
+  </header>
+  <section class="panel panel-default">
+    <h2 class="sr-only">TODOs</h2>
+    <div class="panel-body">
+      <p class="input-group">
+        <input class="form-control" type="text"/>
+        <span class="input-group-btn">
+          <button class="btn btn-default">Add</button>
+        </span>
+      </p>
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Opis</th>
+            <th>Zrobione</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in todo.items">
+            <td>{{item.action}}</td>
+            <td>
+              <input type="checkbox" ng-model="item.done"/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </article>
 <script src="js/angular.min.js"></script>
 <script>
-    var model = {
-        user: "Adam",
-        items: [
-            {action: "Kupić kwiaty", done: false},
-            {action: "Kupić buty", done: false},
-            {action: "Odebrać bilety", done: true},
-            {action: "Zadzwonić do Janka", done: false}
-        ]
-    };
-    var todoApp = angular.module("todoApp", []);
-    todoApp.controller("ToDoCtrl", function($scope) {
-        $scope.todo = model;
+  var model = {
+    user: "Adam",
+    items: [
+      {action: "Kupić kwiaty", done: false},
+      {action: "Kupić buty", done: false},
+      {action: "Odebrać bilety", done: true},
+      {action: "Zadzwonić do Janka", done: false}
+    ]
+  };
 
-        $scope.incompleteCount = function() {
-            var count = 0;
-            angular.forEach($scope.todo.items, function(item) {
-                if (!item.done) { count++; }
-            });
-            return count;
-        }
-    });
+  var todoApp = angular.module("todoApp", []);
+
+  todoApp.controller("ToDoCtrl", function($scope) {
+    $scope.todo = model;
+
+    $scope.incompleteCount = function() {
+      var count = 0;
+      angular.forEach($scope.todo.items, function(item) {
+        if (!item.done) { count++; }
+      });
+      return count;
+    };
+
+    $scope.warningLevel = function() {
+      return $scope.incompleteCount() < 3 ? "label-success" : "label-warning";
+    }
+  });
 </script>
 </body>
 </html>
